@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\UserPhone;
+use App\Models\Trademark;
+use App\Models\Categories;
+use App\Models\Customer;
+use App\Models\Products;
+use Tymon\JWTAuth\Claims\Custom;
+
 class User extends Controller
 {
     //Xuất dữ liệu theo kiểu orm
@@ -130,5 +136,65 @@ class User extends Controller
     // public function GetProducts(){
     //     $json = DB::table('products')->get()->;
     // }
+    public function GetTrademark(){
+        $json = Trademark::all()->toArray();
+        return response()->json([
+            "status" => 200,
+            "data" => $json
+        ], 200);
+    }
+    public function GetCategories(){
+        $json = Categories::all()->toArray();
+        return response()->json([
+            "status" => 200,
+            "data" => $json
+        ], 200);
+    }
+    public function AddProducts(Request $request){
+        $data = new Products;
+        $data->Name = $request->Name;
+        $data->Price = $request->Price;
+        $data->HoatChat = $request->HoatChat;
+        $data->ChiDinh = $request->ChiDinh;
+        $data->DangBaoChe = $request->DangBaoChe;
+        $data->NoiSanXuat = $request->NoiSanXuat;
+        $data->QuyCach = $request->QuyCach;
+        $data->LuuY = $request->LuuY;
+        $data->ThanhPhan = $request->ThanhPhan;
+        $data->ChiDinhChiTiet = $request->ChiDinhChiTiet;
+        $data->ChongChiDinh = $request->ChongChiDinh;
+        $data->LieuDungCachDung = $request->LieuDungCachDung;
+        $data->TacDungPhu = $request->TacDungPhu;
+        $data->ThanTrong = $request->ThanTrong;
+        $data->TuongTacThuoc = $request->TuongTacThuoc;
+        $data->BaoQuan = $request->BaoQuan;
+        $data->Image = $request->Image;
+        $data->Status = $request->Status;
+        $data->Category_id = $request->Category_id;
+        $data->Trademark_id = $request->Trademark_id;
+        $data->save();
+        if($data){
+            
+            return response()->json([
+                "status" => 200,
+                "data" => $data->toArray()
+            ], 200);
+        } else {
+            
+            return response()->json([
+                "status" => 400,
+                "data" => "Add Account Error"
+            ], 400);
+        }
+    }
+    //tạo tài khoản Middleware
+    public function create(){
+        Customer::create([
+            'name'=> "Customer1",
+            'email'=> "Customer1@example.com",
+            'password'=> bcrypt(123456),
+            "phone" => "123456",
+        ]);
+    }
 }
 ?>
